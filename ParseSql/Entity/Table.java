@@ -3,7 +3,7 @@ package ParseSql.Entity;
 
 import java.util.List;
 
-public abstract class Table {
+public class Table {
 
     // 实体类名称
     protected String name;
@@ -37,23 +37,9 @@ public abstract class Table {
         this.propertyList = propertyList;
     }
 
-    // 包名
-    public abstract String buildPackageName();
-
-    // 依赖
-    public abstract String buildImportStatement();
-
-    // 类名称和继承关系
-    public abstract String buildClassNameAndExtends();
-
     // 实体类
     protected String buildEntityStatement() {
         StringBuilder sb = new StringBuilder();
-
-        // 类名
-        sb.append("public class ")
-                .append(this.buildClassNameAndExtends())
-                .append("{\n");
 
         // 属性
         for(Property property : propertyList) {
@@ -69,19 +55,6 @@ public abstract class Table {
             sb.append(property.getSetMethod());
         }
 
-        // 结束
-        sb.append("}");
-        return sb.toString();
-    }
-
-    // 生成实体文本
-    public String buildEntityString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.buildPackageName())
-                .append("\n")
-                .append(this.buildImportStatement())
-                .append("\n")
-                .append(this.buildEntityStatement());
         return sb.toString();
     }
 
