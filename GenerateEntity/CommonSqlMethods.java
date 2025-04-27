@@ -1,6 +1,4 @@
-package ParseSql;
-
-import ParseSql.Entity.Table;
+package GenerateEntity;
 
 public interface CommonSqlMethods {
 

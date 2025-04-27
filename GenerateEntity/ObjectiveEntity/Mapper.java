@@ -1,21 +1,19 @@
-package ParseSql.Objective;
+package GenerateEntity.ObjectiveEntity;
 
-import ParseSql.CommonSqlMethods;
+import GenerateEntity.CommonSqlMethods;
 import ParseSql.Entity.Property;
 import ParseSql.Entity.Table;
 
 import java.util.List;
 
-public class BO extends Table implements CommonSqlMethods {
+public class Mapper extends Table implements CommonSqlMethods  {
 
-    public BO(String name, List<Property> propertyList) {
+    public Mapper(String name, List<Property> propertyList) {
         super(name, propertyList);
-        this.name += "BO";
     }
 
-    public BO(String name) {
+    public Mapper(String name) {
         super(name);
-        this.name += "BO";
     }
 
     @Override
@@ -32,7 +30,10 @@ public class BO extends Table implements CommonSqlMethods {
 
     @Override
     public String buildClassNameAndExtends() {
-        return this.name;
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name)
+                .append(" extends BaseEntity ");
+        return sb.toString();
     }
 
     @Override
