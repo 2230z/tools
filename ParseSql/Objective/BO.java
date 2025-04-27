@@ -1,4 +1,4 @@
-package ParseSql.Entity.Objective;
+package ParseSql.Objective;
 
 import ParseSql.CommonSqlMethods;
 import ParseSql.Entity.Property;
@@ -6,16 +6,16 @@ import ParseSql.Entity.Table;
 
 import java.util.List;
 
-public class VO extends Table implements CommonSqlMethods {
+public class BO extends Table implements CommonSqlMethods {
 
-    public VO(String name, List<Property> propertyList) {
+    public BO(String name, List<Property> propertyList) {
         super(name, propertyList);
-        this.name += "VO";
+        this.name += "BO";
     }
 
-    public VO(String name) {
+    public BO(String name) {
         super(name);
-        this.name += "VO";
+        this.name += "BO";
     }
 
     @Override
@@ -32,10 +32,7 @@ public class VO extends Table implements CommonSqlMethods {
 
     @Override
     public String buildClassNameAndExtends() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.name)
-                .append(" extends BaseVO ");
-        return sb.toString();
+        return this.name;
     }
 
     @Override
