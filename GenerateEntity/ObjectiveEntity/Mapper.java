@@ -1,19 +1,15 @@
 package GenerateEntity.ObjectiveEntity;
 
 import GenerateEntity.CommonSqlMethods;
-import ParseSql.Entity.Property;
-import ParseSql.Entity.Table;
+import GenerateEntity.Entity.Property;
+import GenerateEntity.Entity.Table;
 
 import java.util.List;
 
 public class Mapper extends Table implements CommonSqlMethods  {
 
-    public Mapper(String name, List<Property> propertyList) {
-        super(name, propertyList);
-    }
-
-    public Mapper(String name) {
-        super(name);
+    public Mapper(Table table) {
+        super(table.getName(), table.getPropertyList());
     }
 
     @Override
@@ -43,7 +39,7 @@ public class Mapper extends Table implements CommonSqlMethods  {
                 .append("\n")
                 .append(this.buildImportStatement())
                 .append("\n")
-                .append("public class")
+                .append("public class ")
                 .append(this.buildClassNameAndExtends())
                 .append(" {\n")
                 .append(this.buildEntityStatement())

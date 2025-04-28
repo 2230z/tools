@@ -1,4 +1,4 @@
-package ParseSql.Entity;
+package GenerateEntity.Entity;
 
 
 import java.util.List;

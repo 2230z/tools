@@ -1,21 +1,15 @@
 package GenerateEntity.ObjectiveEntity;
 
 import GenerateEntity.CommonSqlMethods;
-import ParseSql.Entity.Property;
-import ParseSql.Entity.Table;
+import GenerateEntity.Entity.Property;
+import GenerateEntity.Entity.Table;
 
 import java.util.List;
 
 public class BO extends Table implements CommonSqlMethods {
 
-    public BO(String name, List<Property> propertyList) {
-        super(name, propertyList);
-        this.name += "BO";
-    }
-
-    public BO(String name) {
-        super(name);
-        this.name += "BO";
+    public BO(Table table) {
+        super(table.getName()+"BO", table.getPropertyList());
     }
 
     @Override
@@ -42,7 +36,7 @@ public class BO extends Table implements CommonSqlMethods {
                 .append("\n")
                 .append(this.buildImportStatement())
                 .append("\n")
-                .append("public class")
+                .append("public class ")
                 .append(this.buildClassNameAndExtends())
                 .append(" {\n")
                 .append(this.buildEntityStatement())

@@ -1,6 +1,10 @@
 package Utils;
 
-public class StringUtils {
+public class StringUtil {
+
+    public static Boolean isNotBlanket(String str) {
+        return !(str == null || "".equals(str) || str.trim().length() == 0);
+    }
 
     /**
      * 首字母大写，其余小写

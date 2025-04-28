@@ -1,14 +1,13 @@
-package ParseSql;
+package Utils;
 
-import ParseSql.Entity.Property;
-import ParseSql.Entity.Table;
-import Utils.StringUtils;
+import GenerateEntity.Entity.Property;
+import GenerateEntity.Entity.Table;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class parseSql {
+public class parseSqlUtil {
 
     private static Map<String,String> typeMapping = new HashMap<String,String>();
 
@@ -78,7 +77,7 @@ public class parseSql {
             if (matcher.find()) {
                 // 提取表名
                 String tableName = matcher.group(1);
-                String entityName = StringUtils.getEntityName(tableName);
+                String entityName = StringUtil.getEntityName(tableName);
                 result.setName(entityName);
                 // SQL 字段到 java 对象映射
                 List<Property> properties = new ArrayList<Property>();
@@ -91,7 +90,7 @@ public class parseSql {
                         matcher = pattern.matcher(column);
                         if(matcher.find()) {
                             Property property = new Property(typeMapping.get(matcher.group(2)),
-                                                            StringUtils.toCamelString(matcher.group(1)),
+                                                            StringUtil.toCamelString(matcher.group(1)),
                                                             matcher.group(3));
                             properties.add(property);
                         }
