@@ -1,12 +1,12 @@
 package Generate.Entity.ObjectiveEntity;
 
-import Generate.Entity.CommonSqlMethods;
-import Generate.Entity.Entity.Table;
+import interfaces.CommonMethods;
+import Generate.Entity.Entity.Entity;
 
-public class Mapper extends Table implements CommonSqlMethods  {
+public class Mapper extends Entity implements CommonMethods {
 
-    public Mapper(Table table) {
-        super(table.getName(), table.getPropertyList());
+    public Mapper(Entity entity) {
+        super(entity.getName(), entity.getPropertyList());
     }
 
     @Override
@@ -22,26 +22,14 @@ public class Mapper extends Table implements CommonSqlMethods  {
     }
 
     @Override
-    public String buildClassNameAndExtends() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.name)
-                .append(" extends BaseEntity ");
-        return sb.toString();
-    }
-
-    @Override
-    public String buildEntityString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.buildPackageName())
-                .append("\n")
-                .append(this.buildImportStatement())
-                .append("\n")
+    public String buildEntityStatement() {
+        return new StringBuilder()
                 .append("public class ")
-                .append(this.buildClassNameAndExtends())
-                .append(" {\n")
-                .append(this.buildEntityStatement())
-                .append("}");
-        return sb.toString();
+                .append(this.getName())
+                .append(" extends BaseEntity {\n")
+                .append(this.propertiesToString())
+                .append("\n}")
+                .toString();
     }
 
 }

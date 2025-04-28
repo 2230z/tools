@@ -1,7 +1,7 @@
 package Utils;
 
 import Generate.Entity.Entity.Property;
-import Generate.Entity.Entity.Table;
+import Generate.Entity.Entity.Entity;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -45,21 +45,21 @@ public class parseSqlUtil {
     /**
      * 解析 sql 语句
      */
-    private static List<Table> parseSqlStatements(Map<String,List<String>> categorizations) {
-       List<Table> tables = new ArrayList<>();
+    private static List<Entity> parseSqlStatements(Map<String,List<String>> categorizations) {
+       List<Entity> entities = new ArrayList<>();
 
        // 解析建表语句
         for(String statement : categorizations.get("create")) {
-            Table table = parseCreateTable(statement);
-            tables.add(table);
+            Entity entity = parseCreateTable(statement);
+            entities.add(entity);
         }
 
         // 解析修改语句
         for(String statement : categorizations.get("alter")) {
-            parseAlterTable(statement, tables);
+            parseAlterTable(statement, entities);
         }
 
-       return tables;
+       return entities;
     }
 
     /**
@@ -67,8 +67,8 @@ public class parseSqlUtil {
      * create table xxx {  };
      * @param sql
      */
-    private static Table parseCreateTable(String sql) {
-        Table result = new Table();
+    private static Entity parseCreateTable(String sql) {
+        Entity result = new Entity();
         try {
             // 正则表达式匹配
             String regex =  "create table\\s+(\\w+)\\s*\\((.*)\\)";
@@ -112,7 +112,7 @@ public class parseSqlUtil {
      * alter table rename column xxx to xxx;
      */
     // todo 后续扩展
-    private static void parseAlterTable(String sql, List<Table> tables) {
+    private static void parseAlterTable(String sql, List<Entity> entities) {
 
         // 新增字段
 
@@ -122,12 +122,12 @@ public class parseSqlUtil {
     /**
      * 启动函数
      */
-    public static List<Table> run(String sql) {
+    public static List<Entity> run(String sql) {
         // step1: 分割 sql 语句
         Map<String,List<String>> categorizations = splitSqlStatements(sql);
         // step2: 解析语句
-        List<Table> tables = parseSqlStatements(categorizations);
-        return tables;
+        List<Entity> entities = parseSqlStatements(categorizations);
+        return entities;
     }
 
 

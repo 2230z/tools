@@ -1,6 +1,6 @@
 import FileOperation.Entity.ReadObj;
 import FileOperation.Entity.SaveObj;
-import Generate.Entity.Entity.Table;
+import Generate.Entity.Entity.Entity;
 import Generate.Entity.ObjectiveEntity.BO;
 import Generate.Entity.ObjectiveEntity.Mapper;
 import Generate.Entity.ObjectiveEntity.VO;
@@ -65,16 +65,16 @@ public class Module {
     }
 
     // 创建 Mapper, BO, VO 实体类
-    public void createEntities(List<Table> tableList) {
-        if(tableList != null && tableList.size() > 0) {
-            for (Table table : tableList) {
+    public void createEntities(List<Entity> entityList) {
+        if(entityList != null && entityList.size() > 0) {
+            for (Entity entity : entityList) {
                 // todo 文件夹和指定路径
-                Mapper mapper = new Mapper(table);
-                this.appendSaveObj(new SaveObj("/",mapper.getName(),"java",mapper.buildEntityString()));
-                BO bo = new BO(table);
-                this.appendSaveObj(new SaveObj("/",bo.getName(),"java",bo.buildEntityString()));
-                VO vo = new VO(table);
-                this.appendSaveObj(new SaveObj("/",vo.getName(),"java",vo.buildEntityString()));
+//                Mapper mapper = new Mapper(entity);
+//                this.appendSaveObj(new SaveObj("/",mapper.getName(),"java",mapper.buildEntityString()));
+//                BO bo = new BO(entity);
+//                this.appendSaveObj(new SaveObj("/",bo.getName(),"java",bo.buildEntityString()));
+//                VO vo = new VO(entity);
+//                this.appendSaveObj(new SaveObj("/",vo.getName(),"java",vo.buildEntityString()));
             }
         }
         this.saveAllFiles();
@@ -83,8 +83,8 @@ public class Module {
     public static void main(String[] args) {
         Module module = new Module("E:\\isoftstone\\projects\\ZiJinXinTuo\\trust\\java\\cms.trust");
         String sqlState = module.readFile("E:\\isoftstone\\projects\\ZiJinXinTuo\\trust\\java\\cms.trust\\cms.trust.war\\src\\datascript\\mysql\\00004-trust-financial-subscribe-apply.sql");
-        List<Table> tables = parseSqlUtil.run(sqlState);
-        module.createEntities(tables);
+        List<Entity> entities = parseSqlUtil.run(sqlState);
+        module.createEntities(entities);
     }
 
 

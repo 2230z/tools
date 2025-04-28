@@ -3,23 +3,23 @@ package Generate.Entity.Entity;
 
 import java.util.List;
 
-public class Table {
+public class Entity {
 
     // 实体类名称
     protected String name;
     // 属性列表
     protected List<Property> propertyList;
 
-    public Table(String name, List<Property> propertyList) {
+    public Entity(String name, List<Property> propertyList) {
         this.name = name;
         this.propertyList = propertyList;
     }
 
-    public Table(String name) {
+    public Entity(String name) {
         this.name = name;
     }
 
-    public Table() {}
+    public Entity() {}
 
     public String getName() {
         return name;
@@ -37,8 +37,7 @@ public class Table {
         this.propertyList = propertyList;
     }
 
-    // 实体类
-    protected String buildEntityStatement() {
+    protected String propertiesToString() {
         StringBuilder sb = new StringBuilder();
 
         // 属性
@@ -51,8 +50,8 @@ public class Table {
         // get 和 set方法
         for(Property property : propertyList) {
             sb.append(property.getGetMethod());
-            sb.append("\n");
             sb.append(property.getSetMethod());
+            sb.append("\n");
         }
 
         return sb.toString();

@@ -1,44 +1,33 @@
 package Generate.Entity.ObjectiveEntity;
 
-import Generate.Entity.CommonSqlMethods;
-import Generate.Entity.Entity.Table;
+import interfaces.CommonMethods;
+import Generate.Entity.Entity.Entity;
 
-public class BO extends Table implements CommonSqlMethods {
+public class BO extends Entity implements CommonMethods {
 
-    public BO(Table table) {
-        super(table.getName()+"BO", table.getPropertyList());
+    public BO(Entity entity) {
+        super(entity.getName()+"BO", entity.getPropertyList());
     }
 
     @Override
     public String buildPackageName() {
-        StringBuilder sb = new StringBuilder();
-        return sb.toString();
+        return new StringBuilder().toString();
     }
 
     @Override
     public String buildImportStatement() {
-        StringBuilder sb = new StringBuilder();
-        return sb.toString();
+        return new StringBuilder().toString();
     }
 
     @Override
-    public String buildClassNameAndExtends() {
-        return this.name;
-    }
-
-    @Override
-    public String buildEntityString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.buildPackageName())
-                .append("\n")
-                .append(this.buildImportStatement())
-                .append("\n")
+    public String buildEntityStatement() {
+        return new StringBuilder()
                 .append("public class ")
-                .append(this.buildClassNameAndExtends())
+                .append(this.getName())
                 .append(" {\n")
-                .append(this.buildEntityStatement())
-                .append("}");
-        return sb.toString();
+                .append(this.propertiesToString())
+                .append("\n}")
+                .toString();
     }
 
 }

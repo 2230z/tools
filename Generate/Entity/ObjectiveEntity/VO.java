@@ -1,12 +1,12 @@
 package Generate.Entity.ObjectiveEntity;
 
-import Generate.Entity.CommonSqlMethods;
-import Generate.Entity.Entity.Table;
+import interfaces.CommonMethods;
+import Generate.Entity.Entity.Entity;
 
-public class VO extends Table implements CommonSqlMethods {
+public class VO extends Entity implements CommonMethods {
 
-    public VO(Table table) {
-        super(table.getName()+"VO", table.getPropertyList());
+    public VO(Entity entity) {
+        super(entity.getName()+"VO", entity.getPropertyList());
     }
 
     @Override
@@ -22,26 +22,13 @@ public class VO extends Table implements CommonSqlMethods {
     }
 
     @Override
-    public String buildClassNameAndExtends() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.name)
-                .append(" extends BaseVO ");
-        return sb.toString();
-    }
-
-    @Override
-    public String buildEntityString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.buildPackageName())
-                .append("\n")
-                .append(this.buildImportStatement())
-                .append("\n")
+    public String buildEntityStatement() {
+        return new StringBuilder()
                 .append("public class ")
-                .append(this.buildClassNameAndExtends())
-                .append(" {\n")
-                .append(this.buildEntityStatement())
-                .append("}");
-        return sb.toString();
+                .append(this.getName())
+                .append(" extends BaseVO {\n")
+                .append(this.propertiesToString())
+                .append("\n}")
+                .toString();
     }
-
 }
