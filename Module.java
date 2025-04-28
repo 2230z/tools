@@ -1,9 +1,9 @@
 import FileOperation.Entity.ReadObj;
 import FileOperation.Entity.SaveObj;
-import GenerateEntity.Entity.Table;
-import GenerateEntity.ObjectiveEntity.BO;
-import GenerateEntity.ObjectiveEntity.Mapper;
-import GenerateEntity.ObjectiveEntity.VO;
+import Generate.Entity.Entity.Table;
+import Generate.Entity.ObjectiveEntity.BO;
+import Generate.Entity.ObjectiveEntity.Mapper;
+import Generate.Entity.ObjectiveEntity.VO;
 import Utils.StringUtil;
 import Utils.parseSqlUtil;
 
@@ -64,19 +64,27 @@ public class Module {
         writeList.add(obj);
     }
 
+    // 创建 Mapper, BO, VO 实体类
+    public void createEntities(List<Table> tableList) {
+        if(tableList != null && tableList.size() > 0) {
+            for (Table table : tableList) {
+                // todo 文件夹和指定路径
+                Mapper mapper = new Mapper(table);
+                this.appendSaveObj(new SaveObj("/",mapper.getName(),"java",mapper.buildEntityString()));
+                BO bo = new BO(table);
+                this.appendSaveObj(new SaveObj("/",bo.getName(),"java",bo.buildEntityString()));
+                VO vo = new VO(table);
+                this.appendSaveObj(new SaveObj("/",vo.getName(),"java",vo.buildEntityString()));
+            }
+        }
+        this.saveAllFiles();
+    }
+
     public static void main(String[] args) {
         Module module = new Module("E:\\isoftstone\\projects\\ZiJinXinTuo\\trust\\java\\cms.trust");
         String sqlState = module.readFile("E:\\isoftstone\\projects\\ZiJinXinTuo\\trust\\java\\cms.trust\\cms.trust.war\\src\\datascript\\mysql\\00004-trust-financial-subscribe-apply.sql");
         List<Table> tables = parseSqlUtil.run(sqlState);
-        for (Table table : tables) {
-            Mapper mapper = new Mapper(table);
-            module.appendSaveObj(new SaveObj("/",mapper.getName(),"java",mapper.buildEntityString()));
-            BO bo = new BO(table);
-            module.appendSaveObj(new SaveObj("/",bo.getName(),"java",bo.buildEntityString()));
-            VO vo = new VO(table);
-            module.appendSaveObj(new SaveObj("/",vo.getName(),"java",vo.buildEntityString()));
-        }
-        module.saveAllFiles();
+        module.createEntities(tables);
     }
 
 

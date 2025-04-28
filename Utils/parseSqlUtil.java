@@ -1,7 +1,7 @@
 package Utils;
 
-import GenerateEntity.Entity.Property;
-import GenerateEntity.Entity.Table;
+import Generate.Entity.Entity.Property;
+import Generate.Entity.Entity.Table;
 
 import java.util.*;
 import java.util.regex.Matcher;

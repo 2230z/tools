@@ -1,10 +1,7 @@
-package GenerateEntity.ObjectiveEntity;
+package Generate.Entity.ObjectiveEntity;
 
-import GenerateEntity.CommonSqlMethods;
-import GenerateEntity.Entity.Property;
-import GenerateEntity.Entity.Table;
-
-import java.util.List;
+import Generate.Entity.CommonSqlMethods;
+import Generate.Entity.Entity.Table;
 
 public class Mapper extends Table implements CommonSqlMethods  {
 

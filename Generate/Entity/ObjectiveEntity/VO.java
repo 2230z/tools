@@ -1,15 +1,12 @@
-package GenerateEntity.ObjectiveEntity;
+package Generate.Entity.ObjectiveEntity;
 
-import GenerateEntity.CommonSqlMethods;
-import GenerateEntity.Entity.Property;
-import GenerateEntity.Entity.Table;
+import Generate.Entity.CommonSqlMethods;
+import Generate.Entity.Entity.Table;
 
-import java.util.List;
+public class VO extends Table implements CommonSqlMethods {
 
-public class BO extends Table implements CommonSqlMethods {
-
-    public BO(Table table) {
-        super(table.getName()+"BO", table.getPropertyList());
+    public VO(Table table) {
+        super(table.getName()+"VO", table.getPropertyList());
     }
 
     @Override
@@ -26,7 +23,10 @@ public class BO extends Table implements CommonSqlMethods {
 
     @Override
     public String buildClassNameAndExtends() {
-        return this.name;
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name)
+                .append(" extends BaseVO ");
+        return sb.toString();
     }
 
     @Override

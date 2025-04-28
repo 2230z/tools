@@ -1,4 +1,4 @@
-package GenerateEntity;
+package Generate.Entity;
 
 public interface CommonSqlMethods {
 

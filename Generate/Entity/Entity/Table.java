@@ -1,4 +1,4 @@
-package GenerateEntity.Entity;
+package Generate.Entity.Entity;
 
 
 import java.util.List;
