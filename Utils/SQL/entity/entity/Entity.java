@@ -1,4 +1,4 @@
-package Generate.Entity.Entity;
+package Utils.SQL.entity.entity;
 
 
 import java.util.List;

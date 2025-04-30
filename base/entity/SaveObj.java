@@ -1,4 +1,4 @@
-package FileOperation.Entity;
+package base.entity;
 
 import Utils.StringUtil;
 
@@ -29,9 +29,9 @@ public class SaveObj {
     // 持久化
     public void save(String modulePath) {
         try {
-            if (StringUtil.isNotBlanket(this.savePath) &&
-                    StringUtil.isNotBlanket(this.fileName) &&
-                    StringUtil.isNotBlanket(this.fileType)) {
+            if (StringUtil.isNotBlank(this.savePath) &&
+                    StringUtil.isNotBlank(this.fileName) &&
+                    StringUtil.isNotBlank(this.fileType)) {
                 final String str = new StringBuilder(modulePath)
                         .append(this.savePath)
                         .append("/")

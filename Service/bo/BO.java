@@ -1,7 +1,7 @@
-package Generate.Entity.ObjectiveEntity;
+package Service.bo;
 
-import interfaces.CommonMethods;
-import Generate.Entity.Entity.Entity;
+import base.api.CommonMethods;
+import Utils.SQL.entity.entity.Entity;
 
 public class BO extends Entity implements CommonMethods {
 

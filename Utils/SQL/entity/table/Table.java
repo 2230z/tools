@@ -1,6 +1,4 @@
-package Generate.XML.Entity;
-
-import Generate.Entity.Entity.Property;
+package Utils.SQL.entity.table;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package Generate.XML.Entity;
+package Utils.SQL.entity.table;
 
 import Utils.StringUtil;
 

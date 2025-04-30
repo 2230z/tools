@@ -2,7 +2,7 @@ package Utils;
 
 public class StringUtil {
 
-    public static Boolean isNotBlanket(String str) {
+    public static Boolean isNotBlank(String str) {
         return !(str == null || "".equals(str) || str.trim().length() == 0);
     }
 

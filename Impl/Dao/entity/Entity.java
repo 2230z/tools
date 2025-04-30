@@ -1,12 +1,11 @@
-package Generate.Entity.ObjectiveEntity;
+package Impl.Dao.entity;
 
-import interfaces.CommonMethods;
-import Generate.Entity.Entity.Entity;
+import base.api.CommonMethods;
 
-public class VO extends Entity implements CommonMethods {
+public class Entity extends Utils.SQL.entity.entity.Entity implements CommonMethods {
 
-    public VO(Entity entity) {
-        super(entity.getName()+"VO", entity.getPropertyList());
+    public Entity(Utils.SQL.entity.entity.Entity entity) {
+        super(entity.getName(), entity.getPropertyList());
     }
 
     @Override
@@ -26,9 +25,10 @@ public class VO extends Entity implements CommonMethods {
         return new StringBuilder()
                 .append("public class ")
                 .append(this.getName())
-                .append(" extends BaseVO {\n")
+                .append(" extends BaseEntity {\n")
                 .append(this.propertiesToString())
                 .append("\n}")
                 .toString();
     }
+
 }

@@ -1,12 +1,12 @@
-package Generate.Entity.ObjectiveEntity;
+package Web.vo;
 
-import interfaces.CommonMethods;
-import Generate.Entity.Entity.Entity;
+import base.api.CommonMethods;
+import Utils.SQL.entity.entity.Entity;
 
-public class Mapper extends Entity implements CommonMethods {
+public class VO extends Entity implements CommonMethods {
 
-    public Mapper(Entity entity) {
-        super(entity.getName(), entity.getPropertyList());
+    public VO(Entity entity) {
+        super(entity.getName()+"VO", entity.getPropertyList());
     }
 
     @Override
@@ -26,10 +26,9 @@ public class Mapper extends Entity implements CommonMethods {
         return new StringBuilder()
                 .append("public class ")
                 .append(this.getName())
-                .append(" extends BaseEntity {\n")
+                .append(" extends BaseVO {\n")
                 .append(this.propertiesToString())
                 .append("\n}")
                 .toString();
     }
-
 }
