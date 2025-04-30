@@ -57,7 +57,7 @@ public class parseSqlUtil {
                 // 提取 SQL 字段
                 List<Column> columnList = new ArrayList<>();
                 String[] columns = matcher.group(2).split("',");
-                if(columns.length > 0) {
+                if(columns != null && columns.length > 0) {
                     for(String column : columns) {
                         // 正则表达式匹配取值
                         regex = "\\s*(\\w+)\\s+(\\w+)\\(.*comment\\s+'([^']+)";

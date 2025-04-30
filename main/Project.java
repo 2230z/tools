@@ -1,10 +1,12 @@
+package main;
+
 import Utils.SQL.parseSqlUtil;
 import base.entity.SaveObj;
-import Service.bo.BO;
-import Impl.Dao.entity.Entity;
-import Web.vo.VO;
+import base.entity.Module;
 import Utils.StringUtil;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +23,8 @@ public class Project {
     private String projectName;
     // 项目路径  e.g. E:/xxx
     private static String modulePath;
+    // 项目名称公共前缀 e.g. src/main/java/(com/iss/cms)/trust/xxx
+    private static String prefix;
     // SQL 脚本路径
     // todo sql脚本应该从项目中遍历搜索，自动判断是否需要生成文件
     private static String sqlScript;
@@ -31,7 +35,11 @@ public class Project {
     // 写入列表
     private List<SaveObj> saveList;
 
-    public String getModulePath() { return modulePath; }
+    public static String getModulePath() { return modulePath; }
+
+    public static String getPrefix() { return prefix; }
+
+    public String getCommonFunctionName() { return this.parsedSql.getTableName(); }
 
     // 单例模式对象
     private static Project project;
@@ -70,7 +78,7 @@ public class Project {
                 // 截取模块名称
                 String[] parts = this.modulePath.split("/");
                 if (parts.length > 1) {
-                    this.projectName = parts[parts.length - 1];
+                    projectName = parts[parts.length - 1];
                 }
             }
         }
@@ -83,88 +91,42 @@ public class Project {
         this.parsedSql = new parseSqlUtil(sqlScript);
     }
 
+    // 迭代法取项目公共前缀
+    private void getFixedProjectPrefix() {
+        this.prefix = "";
+        final String startApplication = "startApplication.java";
+        // 构建war包路径
+        String[] parts = this.modulePath.split("/");
+        String path = new StringBuilder(modulePath).append("/").append(parts[parts.length - 1]).append(".war/src/main/java").toString();
+        if(!Files.exists(Paths.get(path))) {
+            System.out.println("项目路径无效");
+        }
+        while(true) {
+            File file = new File(path);
+            if(file.isDirectory()) {
+                File[] files = file.listFiles();
+                if(files.length == 1 && files[0].isDirectory()) {
+                    path += "/" + files[0].getName();
+                    this.prefix += "/" + files[0].getName();
+                } else break;
+            } else if(file.isFile() && file.getName().equals(startApplication)) break;
+        }
+    }
+
     /**
      * 构建模块列表
      */
     private void buildModuleList() {
-
-    }
-
-    // 生成所有模块的文件
-    public void saveAllFiles() {
-        if(saveList != null && saveList.size() > 0) {
-            for (SaveObj obj : saveList) {
-                obj.save(this.modulePath);
-            }
-        }
-    }
-
-    /**
-     * 追加持久化内容
-     * @param obj
-     */
-    public void appendSaveObj(SaveObj obj) {
-        if(saveList == null) {
-            saveList = new ArrayList<SaveObj>();
-        }
-        saveList.add(obj);
-    }
-
-
-    // 创建 Mapper, BO, VO 实体类
-    public void createEntities(List<Utils.SQL.entity.entity.Entity> entityList) {
-        if(entityList != null && entityList.size() > 0) {
-            for (Utils.SQL.entity.entity.Entity entity : entityList) {
-                // todo 文件夹和指定路径
-                Entity mapper = new Entity(entity);
-                this.appendSaveObj(new SaveObj("/",mapper.getName(),"java",mapper.createStoredString()));
-                BO bo = new BO(entity);
-                this.appendSaveObj(new SaveObj("/",bo.getName(),"java",bo.createStoredString()));
-                VO vo = new VO(entity);
-                this.appendSaveObj(new SaveObj("/",vo.getName(),"java",vo.createStoredString()));
-            }
-        }
-        this.saveAllFiles();
-    }
-
-    // 创建文件夹路径
-    public void createDirectories() {
+        this.getFixedProjectPrefix();
         if(StringUtil.isNotBlank(this.modulePath)) {
             String regex = this.projectName + ".(\\w+)";
             Pattern pattern = Pattern.compile(regex);
-
             File file = new File(modulePath);
-            Map<String,String> hash = Arrays.stream(file.listFiles())
+            this.moduleList = Arrays.stream(file.listFiles())
                     .filter(f -> pattern.matcher(f.getName()).find())
-                    .collect(Collectors.toMap(
-                            e-> {
-                                Matcher matcher = pattern.matcher(e.getName());
-                                if(matcher.find()) {
-                                    return matcher.group(1);
-                                } else return null;
-                            },
-                            File::getAbsolutePath,
-                            (existing, replacing) -> existing
-                    ));
-
-            System.out.println();
+                    .map(e -> new Module(e.getName()))
+                    .collect(Collectors.toList());
         }
-
-
-        // Mapper
-
-        // Service
-
-        // Controller
     }
-
-    public static void main(String[] args) {
-        Project project = Project.getInstance();
-//        String sqlState = module.readFile("E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust/cms.trust.war/src/datascript/mysql/00004-trust-financial-subscribe-apply.sql");
-//        List<Entity> entities = parseSqlUtil.run(sqlState);
-//        module.createEntities(entities);
-        project.createDirectories();
-    }
-
 
 }

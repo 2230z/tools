@@ -59,7 +59,8 @@ public class Table {
                 .map(c -> {
                     StringBuilder sb = new StringBuilder();
                     switch (c.getType()) {
-                        case "INTEGER", "DECIMAL":
+                        case "INTEGER":
+                        case "DECIMAL":
                             sb.append(String.format("\t\t<if test=\"%s != null> \n" +
                                             "\t\t\t and %s = #{%s} \n" +
                                             "\t\t </if>",
@@ -71,6 +72,7 @@ public class Table {
                                     "\t\t </if>",
                                     c.getEntityProperty(),c.getEntityProperty(),c.getName(),c.getEntityProperty()));
                             break;
+
                     }
                     return sb.toString();
                 }).collect(Collectors.joining("\n"));
