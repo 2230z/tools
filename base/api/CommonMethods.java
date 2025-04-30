@@ -8,7 +8,7 @@ public interface CommonMethods {
     // 依赖
     public abstract String buildImportStatement();
 
-    // 内容'[
+    // 内容
 
     public abstract String buildEntityStatement();
 

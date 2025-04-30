@@ -1,7 +1,6 @@
 package base.entity;
 
 import main.Project;
-
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,13 +9,14 @@ public class Module {
     // 公共子路径
     private static final String fixedSubPath = "/src/main/java";
     // 模块名称
-    private String moduleName;
+    protected String moduleName;
     // 模块路径
-    private String modulePath;
+    protected String modulePath;
 
     public Module(String moduleName) {
+        Project project = Project.getInstance();
         this.parseModuleName(moduleName);
-        this.modulePath = String.format("/%s%s%s", moduleName, fixedSubPath, Project.getPrefix());
+        this.modulePath = String.format("/%s%s%s", moduleName, fixedSubPath, project.getPrefix());
         this.extendPackage();
     }
 
@@ -43,7 +43,5 @@ public class Module {
             }
         }
     }
-
-
 
 }

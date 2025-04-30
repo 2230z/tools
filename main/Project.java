@@ -1,10 +1,12 @@
 package main;
 
 import Utils.SQL.parseSqlUtil;
-import base.entity.SaveObj;
+import base.api.moduleMethods;
 import base.entity.Module;
 import Utils.StringUtil;
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -24,20 +26,18 @@ public class Project {
     // 项目路径  e.g. E:/xxx
     private static String modulePath;
     // 项目名称公共前缀 e.g. src/main/java/(com/iss/cms)/trust/xxx
-    private static String prefix;
+    private String prefix;
     // SQL 脚本路径
     // todo sql脚本应该从项目中遍历搜索，自动判断是否需要生成文件
     private static String sqlScript;
     // 模块列表
-    private List<Module> moduleList;
+    private List<moduleMethods> moduleList;
     // sql 解析对象
     private parseSqlUtil parsedSql;
-    // 写入列表
-    private List<SaveObj> saveList;
 
     public static String getModulePath() { return modulePath; }
 
-    public static String getPrefix() { return prefix; }
+    public String getPrefix() { return this.prefix; }
 
     public String getCommonFunctionName() { return this.parsedSql.getTableName(); }
 
@@ -48,6 +48,7 @@ public class Project {
         modulePath = "E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust";
         sqlScript = "E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust/cms.trust.war/src/datascript/mysql/00004-trust-financial-subscribe-apply.sql";
         project = new Project();
+        System.out.println("Project 静态已加载");
     }
 
     // 向外暴露唯一的创建对象方法
@@ -60,8 +61,6 @@ public class Project {
         this.parseProjectName();
         // step2: 解析 SQL 脚本文件
         this.parseSqlScripts();
-        // step3: 构建模块列表
-        this.buildModuleList();
     }
 
     /**
@@ -91,6 +90,43 @@ public class Project {
         this.parsedSql = new parseSqlUtil(sqlScript);
     }
 
+    /**
+     * 构建模块列表
+     */
+    private void buildModuleList() {
+        Map<String, String> classForNameMapping = new HashMap<>();
+        classForNameMapping.put("common","Common.Common");
+        classForNameMapping.put("impl","Impl.Impl");
+        classForNameMapping.put("service","Service.Service");
+        classForNameMapping.put("job","Job.Job");
+        classForNameMapping.put("web","Web.Web");
+        classForNameMapping.put("war","War.War");
+
+        this.getFixedProjectPrefix();
+        if (StringUtil.isNotBlank(this.modulePath)) {
+            String regex = this.projectName + ".(\\w+)";
+            Pattern pattern = Pattern.compile(regex);
+            File file = new File(modulePath);
+            this.moduleList = Arrays.stream(file.listFiles())
+                    .filter(f -> pattern.matcher(f.getName()).find())
+                    .map(e -> {
+                        Matcher matcher = pattern.matcher(e.getName());
+                        if (matcher.find()) {
+                            String name = matcher.group(1);
+                            try {
+                                Class<?> moduleClass = Class.forName(classForNameMapping.get(name));
+                                Constructor<?> constructor = moduleClass.getConstructor(String.class);
+                                moduleMethods obj = (moduleMethods) constructor.newInstance(e.getName());
+                                return obj;
+                            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                        return null;
+                    }).collect(Collectors.toList());
+        }
+    }
+
     // 迭代法取项目公共前缀
     private void getFixedProjectPrefix() {
         this.prefix = "";
@@ -113,20 +149,12 @@ public class Project {
         }
     }
 
-    /**
-     * 构建模块列表
-     */
-    private void buildModuleList() {
-        this.getFixedProjectPrefix();
-        if(StringUtil.isNotBlank(this.modulePath)) {
-            String regex = this.projectName + ".(\\w+)";
-            Pattern pattern = Pattern.compile(regex);
-            File file = new File(modulePath);
-            this.moduleList = Arrays.stream(file.listFiles())
-                    .filter(f -> pattern.matcher(f.getName()).find())
-                    .map(e -> new Module(e.getName()))
-                    .collect(Collectors.toList());
-        }
+    public void run() {
+        // step3: 构建模块列表
+        this.buildModuleList();
+
+        // step4: 生成文件
+
     }
 
 }
