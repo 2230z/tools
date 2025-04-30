@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 // todo 目前限于一个文件只有一条 create 语句
 public class parseSqlUtil {
-    // 表名的驼峰格式
+    // 表名的文件夹格式
     private String tableName;
     // 解析出的库表对象（供 Mybatis XML 文件使用）
     private Table table;
@@ -94,7 +94,7 @@ public class parseSqlUtil {
 
     private void setTableName() {
         if(this.tableName == null || "".equals(this.tableName)) {
-            this.tableName = this.entity.getName();
+            this.tableName = this.entity.getName().toLowerCase();
         }
     }
 
