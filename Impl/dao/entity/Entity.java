@@ -1,4 +1,4 @@
-package Impl.Dao.entity;
+package Impl.dao.entity;
 
 import base.api.CommonBuildMethods;
 

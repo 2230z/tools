@@ -17,7 +17,7 @@ public class Service extends Module {
         this.getDirectory().appendSubDirectory(new Directory("bo"))
                 .addSavedFile(new ObjFile("BO","java"));
         // step3: interface
-        this.getDirectory().addSavedFile(new ObjFile("service","java"));
+        this.getDirectory().addSavedFile(new ObjFile("Service","java"));
     }
 
 }
