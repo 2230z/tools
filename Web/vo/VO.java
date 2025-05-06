@@ -1,9 +1,9 @@
 package Web.vo;
 
-import base.api.CommonMethods;
+import base.api.CommonBuildMethods;
 import Utils.SQL.entity.entity.Entity;
 
-public class VO extends Entity implements CommonMethods {
+public class VO extends Entity implements CommonBuildMethods {
 
     public VO(Entity entity) {
         super(entity.getName()+"VO", entity.getPropertyList());

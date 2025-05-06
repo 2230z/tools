@@ -1,6 +1,6 @@
 package base.api;
 
-public interface CommonMethods {
+public interface CommonBuildMethods {
 
     // 包名
     public abstract String buildPackageName();

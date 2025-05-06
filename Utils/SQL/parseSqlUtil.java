@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 // todo 目前限于一个文件只有一条 create 语句
 public class parseSqlUtil {
     // 表名的文件夹格式
-    private String tableName;
+    private String commonName;
     // 解析出的库表对象（供 Mybatis XML 文件使用）
     private Table table;
     // 解析出的实体对象（供生成BO，VO使用）
@@ -36,7 +36,7 @@ public class parseSqlUtil {
         typeMapping.put("decimal","BigDecimal");
     }
 
-    public String getTableName() {  return this.tableName; }
+    public String getCommonName() {  return this.commonName; }
 
     /**
      * 解析建表语句 生成
@@ -93,8 +93,8 @@ public class parseSqlUtil {
     }
 
     private void setTableName() {
-        if(this.tableName == null || "".equals(this.tableName)) {
-            this.tableName = this.entity.getName().toLowerCase();
+        if(this.commonName == null || "".equals(this.commonName)) {
+            this.commonName = this.entity.getName().toLowerCase();
         }
     }
 

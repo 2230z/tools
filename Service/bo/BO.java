@@ -1,9 +1,9 @@
 package Service.bo;
 
-import base.api.CommonMethods;
+import base.api.CommonBuildMethods;
 import Utils.SQL.entity.entity.Entity;
 
-public class BO extends Entity implements CommonMethods {
+public class BO extends Entity implements CommonBuildMethods {
 
     public BO(Entity entity) {
         super(entity.getName()+"BO", entity.getPropertyList());

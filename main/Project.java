@@ -1,9 +1,9 @@
 package main;
 
 import Utils.SQL.parseSqlUtil;
-import base.api.moduleMethods;
-import base.entity.Module;
 import Utils.StringUtil;
+import base.entity.Module;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -24,31 +24,30 @@ public class Project {
     // 项目名称
     private String projectName;
     // 项目路径  e.g. E:/xxx
-    private static String modulePath;
+    private static String projectPath;
     // 项目名称公共前缀 e.g. src/main/java/(com/iss/cms)/trust/xxx
     private String prefix;
     // SQL 脚本路径
     // todo sql脚本应该从项目中遍历搜索，自动判断是否需要生成文件
     private static String sqlScript;
     // 模块列表
-    private List<moduleMethods> moduleList;
+    private List<Module> moduleList;
     // sql 解析对象
     private parseSqlUtil parsedSql;
 
-    public static String getModulePath() { return modulePath; }
+    public static String getModulePath() { return projectPath; }
 
     public String getPrefix() { return this.prefix; }
 
-    public String getCommonFunctionName() { return this.parsedSql.getTableName(); }
+    public String getCommonName() { return this.parsedSql.getCommonName(); }
 
     // 单例模式对象
     private static Project project;
 
     static {
-        modulePath = "E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust";
+        projectPath = "E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust";
         sqlScript = "E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust/cms.trust.war/src/datascript/mysql/00004-trust-financial-subscribe-apply.sql";
         project = new Project();
-        System.out.println("Project 静态已加载");
     }
 
     // 向外暴露唯一的创建对象方法
@@ -67,15 +66,15 @@ public class Project {
      * 解析项目名称
      */
     private void parseProjectName() {
-        if(StringUtil.isNotBlank(this.modulePath)) {
-            this.modulePath = this.modulePath.contains("\\") ?
-                    this.modulePath.replaceAll("\\\\", "/") :
-                    this.modulePath;
+        if(StringUtil.isNotBlank(this.projectPath)) {
+            this.projectPath = this.projectPath.contains("\\") ?
+                    this.projectPath.replaceAll("\\\\", "/") :
+                    this.projectPath;
             // 判断文件路径真实有效
-            File file = new File(this.modulePath);
+            File file = new File(this.projectPath);
             if(file.exists() && file.isDirectory()) {
                 // 截取模块名称
-                String[] parts = this.modulePath.split("/");
+                String[] parts = this.projectPath.split("/");
                 if (parts.length > 1) {
                     projectName = parts[parts.length - 1];
                 }
@@ -103,10 +102,10 @@ public class Project {
         classForNameMapping.put("war","War.War");
 
         this.getFixedProjectPrefix();
-        if (StringUtil.isNotBlank(this.modulePath)) {
+        if (StringUtil.isNotBlank(this.projectPath)) {
             String regex = this.projectName + ".(\\w+)";
             Pattern pattern = Pattern.compile(regex);
-            File file = new File(modulePath);
+            File file = new File(projectPath);
             this.moduleList = Arrays.stream(file.listFiles())
                     .filter(f -> pattern.matcher(f.getName()).find())
                     .map(e -> {
@@ -116,7 +115,7 @@ public class Project {
                             try {
                                 Class<?> moduleClass = Class.forName(classForNameMapping.get(name));
                                 Constructor<?> constructor = moduleClass.getConstructor(String.class);
-                                moduleMethods obj = (moduleMethods) constructor.newInstance(e.getName());
+                                Module obj = (Module) constructor.newInstance(e.getName());
                                 return obj;
                             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
                                 throw new RuntimeException(ex);
@@ -132,8 +131,8 @@ public class Project {
         this.prefix = "";
         final String startApplication = "startApplication.java";
         // 构建war包路径
-        String[] parts = this.modulePath.split("/");
-        String path = new StringBuilder(modulePath).append("/").append(parts[parts.length - 1]).append(".war/src/main/java").toString();
+        String[] parts = this.projectPath.split("/");
+        String path = new StringBuilder(projectPath).append("/").append(parts[parts.length - 1]).append(".war/src/main/java").toString();
         if(!Files.exists(Paths.get(path))) {
             System.out.println("项目路径无效");
         }
@@ -152,9 +151,10 @@ public class Project {
     public void run() {
         // step3: 构建模块列表
         this.buildModuleList();
-
-        // step4: 生成文件
-
+        // step4: 创建文件夹
+//        this.moduleList.forEach(Module::);
+//        // step4: 生成文件
+//        this.moduleList.forEach(CommonModuleMethods::createFiles);
     }
 
 }

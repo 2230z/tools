@@ -1,20 +1,15 @@
 package War;
 
-import base.api.moduleMethods;
 import base.entity.Module;
 
-public class War extends Module implements moduleMethods {
+public class War extends Module {
     public War(String moduleName) {
         super(moduleName);
     }
 
     @Override
-    public void createDirectories() {
+    public void buildDirectories() {
 
     }
 
-    @Override
-    public void createFiles() {
-
-    }
 }

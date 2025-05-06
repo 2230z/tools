@@ -1,20 +1,19 @@
 package Job;
 
-import base.api.moduleMethods;
 import base.entity.Module;
 
-public class Job extends Module implements moduleMethods {
+public class Job extends Module {
     public Job(String moduleName) {
         super(moduleName);
     }
 
     @Override
-    public void createDirectories() {
+    public void buildDirectories() {
 
     }
 
     @Override
-    public void createFiles() {
+    public void generateFiles() {
 
     }
 }
