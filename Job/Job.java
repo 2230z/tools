@@ -11,9 +11,4 @@ public class Job extends Module {
     public void buildDirectories() {
 
     }
-
-    @Override
-    public void generateFiles() {
-
-    }
 }
