@@ -1,5 +1,7 @@
 package main;
 
+import Utils.SQL.entity.entity.EntityClass;
+import Utils.SQL.entity.table.Table;
 import Utils.SQL.parseSqlUtil;
 import Utils.StringUtil;
 import base.entity.Module;
@@ -61,6 +63,9 @@ public class Project {
         // step2: 解析 SQL 脚本文件
         this.parseSqlScripts();
     }
+
+    public Table parseSqlTable() { return this.parsedSql.getTable(); }
+    public EntityClass parseSqlEntity() { return this.parsedSql.getEntityClass(); }
 
     /**
      * 解析项目名称
@@ -152,7 +157,7 @@ public class Project {
         // step3: 构建模块列表
         this.buildModuleList();
         // step4: 创建文件夹
-//        this.moduleList.forEach(Module::);
+        this.moduleList.forEach(Module::buildDirectories);
 //        // step4: 生成文件
 //        this.moduleList.forEach(CommonModuleMethods::createFiles);
     }

@@ -9,7 +9,6 @@ public interface CommonBuildMethods {
     public abstract String buildImportStatement();
 
     // 内容
-
     public abstract String buildEntityStatement();
 
     default String createStoredString() {

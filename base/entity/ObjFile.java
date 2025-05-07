@@ -23,13 +23,20 @@ public class ObjFile implements StructureMethod {
 
     public void setContent(String content) { this.content = content; }
 
-    public ObjFile(String fileName, String fileType) {
-        this.fileName = StringUtil.FirstUpperLeftLower(Project.getInstance().getCommonName() + fileName);
+    public ObjFile(String fileName, String fileType, String content) {
+        this.fileName = Project.getInstance().getCommonName() + fileName;
         this.fileType = fileType;
+        this.content = content;
+    }
+
+    public ObjFile(String fileType, String content) {
+        this.fileName = Project.getInstance().getCommonName();
+        this.fileType = fileType;
+        this.content = content;
     }
 
     public ObjFile( String fileType) {
-        this.fileName = StringUtil.FirstUpperLeftLower(Project.getInstance().getCommonName());
+        this.fileName = Project.getInstance().getCommonName();
         this.fileType = fileType;
     }
 
@@ -40,6 +47,6 @@ public class ObjFile implements StructureMethod {
 
     @Override
     public String getAbsolutePath() {
-        return Paths.get(this.directory.getAbsolutePath(),"/", this.fileName, ".", this.fileType).toString();
+        return String.format("%s/%s.%s",this.directory.getAbsolutePath(), this.fileName,this.fileType);
     }
 }

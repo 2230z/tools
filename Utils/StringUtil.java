@@ -37,7 +37,7 @@ public class StringUtil {
 
     /**
      * 根据表明生成实体类名称
-     * T_BASE_TABLE_NAME --> tableName
+     * T_BASE_TABLE_NAME --> TableName
      * @param tableName
      * @return
      */

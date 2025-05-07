@@ -4,7 +4,7 @@ import Utils.IoUtils;
 import Utils.SQL.entity.table.Column;
 import Utils.StringUtil;
 import Utils.SQL.entity.entity.Property;
-import Utils.SQL.entity.entity.Entity;
+import Utils.SQL.entity.entity.EntityClass;
 import Utils.SQL.entity.table.Table;
 
 import java.util.*;
@@ -19,7 +19,11 @@ public class parseSqlUtil {
     // 解析出的库表对象（供 Mybatis XML 文件使用）
     private Table table;
     // 解析出的实体对象（供生成BO，VO使用）
-    private Entity entity;
+    private EntityClass entityClass;
+
+    public Table getTable() { return table; }
+
+    public EntityClass getEntityClass() { return entityClass; }
 
     public parseSqlUtil(String sqlPath) {
         String sqlContent = IoUtils.read(sqlPath);
@@ -78,9 +82,8 @@ public class parseSqlUtil {
 
     private void createByTable() {
         if(this.table != null) {
-            this.entity = new Entity();
-            this.entity.setName(StringUtil.getEntityName(this.table.getTableName()));
-            this.entity.setPropertyList(
+            this.entityClass = new EntityClass(StringUtil.getEntityName(this.table.getTableName()));
+            this.entityClass.setPropertyList(
                     this.table.getColumnList()
                             .stream()
                             .map(column ->
@@ -94,7 +97,7 @@ public class parseSqlUtil {
 
     private void setTableName() {
         if(this.commonName == null || "".equals(this.commonName)) {
-            this.commonName = this.entity.getName().toLowerCase();
+            this.commonName = this.entityClass.getName();
         }
     }
 
@@ -129,13 +132,13 @@ public class parseSqlUtil {
 //    /**
 //     * 解析 sql 语句
 //     */
-//    private static List<Entity> parseSqlStatements(Map<String,List<String>> categorizations) {
-//       List<Entity> entities = new ArrayList<>();
+//    private static List<EntityClass> parseSqlStatements(Map<String,List<String>> categorizations) {
+//       List<EntityClass> entities = new ArrayList<>();
 //
 //       // 解析建表语句
 //        for(String statement : categorizations.get("create")) {
-//            Entity entity = parseCreateTable(statement);
-//            entities.add(entity);
+//            EntityClass entityClass = parseCreateTable(statement);
+//            entities.add(entityClass);
 //        }
 //
 //        // 解析修改语句
@@ -155,7 +158,7 @@ public class parseSqlUtil {
 //     * alter table rename column xxx to xxx;
 //     */
 //    // todo 后续扩展
-//    private static void parseAlterTable(String sql, List<Entity> entities) {
+//    private static void parseAlterTable(String sql, List<EntityClass> entities) {
 //
 //        // 新增字段
 //
@@ -165,11 +168,11 @@ public class parseSqlUtil {
 //    /**
 //     * 启动函数
 //     */
-//    public static List<Entity> run(String sql) {
+//    public static List<EntityClass> run(String sql) {
 //        // step1: 分割 sql 语句
 //        Map<String,List<String>> categorizations = splitSqlStatements(sql);
 //        // step2: 解析语句
-//        List<Entity> entities = parseSqlStatements(categorizations);
+//        List<EntityClass> entities = parseSqlStatements(categorizations);
 //        return entities;
 //    }
 

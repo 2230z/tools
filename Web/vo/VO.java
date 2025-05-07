@@ -1,12 +1,12 @@
 package Web.vo;
 
+import Utils.SQL.entity.entity.EntityClass;
 import base.api.CommonBuildMethods;
-import Utils.SQL.entity.entity.Entity;
 
-public class VO extends Entity implements CommonBuildMethods {
+public class VO extends EntityClass implements CommonBuildMethods {
 
-    public VO(Entity entity) {
-        super(entity.getName()+"VO", entity.getPropertyList());
+    public VO(EntityClass entityClass) {
+        super(entityClass.getName()+"VO", entityClass.getPropertyList());
     }
 
     @Override

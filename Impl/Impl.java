@@ -1,6 +1,8 @@
 package Impl;
 
+import Impl.dao.entity.Entity;
 import Utils.StringUtil;
+import base.api.CommonBuildMethods;
 import base.entity.Directory;
 import base.entity.Module;
 import base.entity.ObjFile;
@@ -20,7 +22,7 @@ public class Impl extends Module {
         // step2: Dao
         Directory dao = this.getDirectory().appendSubDirectory(new Directory("dao"));
         dao.appendSubDirectory(new Directory("entity"))
-                .addSavedFile(new ObjFile("java"));
+                .addSavedFile(new ObjFile("java", this.createDaoEntity()));
         dao.appendSubDirectory(new Directory("impl"))
                 .addSavedFile(new ObjFile("DaoImpl","java"));
         dao.appendSubDirectory(new Directory("mapper"))
@@ -30,6 +32,12 @@ public class Impl extends Module {
         this.getDirectory().appendSubDirectory(new Directory("service"))
                 .appendSubDirectory(new Directory("impl"))
                 .addSavedFile(new ObjFile("ServiceImpl","java"));
+    }
+
+    private String createDaoEntity() {
+        Project project = Project.getInstance();
+        CommonBuildMethods entity = new Entity(project.parseSqlEntity());
+        return entity.createStoredString();
     }
 
 }

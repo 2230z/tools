@@ -50,7 +50,7 @@ public abstract class Module implements StructureMethod {
 
     // 生成一级目录
     protected void createFunctionDirectory() {
-        this.directory = new Directory(Project.getInstance().getCommonName());
+        this.directory = new Directory(Project.getInstance().getCommonName().toLowerCase());
         directory.setModule(this);
         IoUtils.mkdir(this.directory.getAbsolutePath());
     }

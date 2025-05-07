@@ -3,31 +3,23 @@ package Utils.SQL.entity.entity;
 
 import java.util.List;
 
-public class Entity {
+public class EntityClass {
 
     // 实体类名称
-    protected String name;
+    protected final String name;
     // 属性列表
     protected List<Property> propertyList;
 
-    public Entity(String name, List<Property> propertyList) {
+    public EntityClass(String name, List<Property> propertyList) {
         this.name = name;
         this.propertyList = propertyList;
     }
 
-    public Entity(String name) {
+    public EntityClass(String name) {
         this.name = name;
     }
 
-    public Entity() {}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
 
     public List<Property> getPropertyList() {
         return propertyList;

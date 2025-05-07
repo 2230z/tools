@@ -1,8 +1,12 @@
 package Web;
 
+import Impl.dao.entity.Entity;
+import Web.vo.VO;
+import base.api.CommonBuildMethods;
 import base.entity.Directory;
 import base.entity.Module;
 import base.entity.ObjFile;
+import main.Project;
 
 public class Web extends Module {
     public Web(String moduleName) {
@@ -18,7 +22,13 @@ public class Web extends Module {
                 .addSavedFile(new ObjFile("Controller","java"));
         // step3: vo
         this.getDirectory().appendSubDirectory(new Directory("vo"))
-                .addSavedFile(new ObjFile("VO","java"));
+                .addSavedFile(new ObjFile("VO","java", this.createWebVO()));
+    }
+
+    private String createWebVO() {
+        Project project = Project.getInstance();
+        CommonBuildMethods vo = new VO(project.parseSqlEntity());
+        return vo.createStoredString();
     }
 
 }

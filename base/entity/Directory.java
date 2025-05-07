@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class Directory implements StructureMethod {
     // 文件夹名称
-    private String name;
+    private final String name;
     // 所属模块（module 和 parentDirectory 必须有一个是 null）
     private Module module;
     // 所属文件夹
@@ -36,7 +36,8 @@ public class Directory implements StructureMethod {
      */
     public void addSavedFile(ObjFile file) {
         file.setDirectory(this);
-        Optional.ofNullable(this.fileList).orElse(new ArrayList<ObjFile>()).add(file);
+        this.fileList = Optional.ofNullable(this.fileList).orElseGet(ArrayList::new);
+        this.fileList.add(file);
     }
 
     /**
@@ -45,13 +46,14 @@ public class Directory implements StructureMethod {
      */
     public Directory appendSubDirectory(Directory subDirectory) {
         subDirectory.setParentDirectory(this);
-        Optional.ofNullable(this.directoryList).orElse(new ArrayList<>()).add(subDirectory);
+        this.directoryList = Optional.ofNullable(this.directoryList).orElseGet(ArrayList::new);
+        this.directoryList.add(subDirectory);
         return subDirectory;
     }
 
     @Override
     public String getAbsolutePath() {
-        String absolutePath = Paths.get("/", this.name).toString();
+        String absolutePath = "/" + this.name;
         // 出口
         if(this.module != null) {
             absolutePath = this.module.getAbsolutePath() + absolutePath;

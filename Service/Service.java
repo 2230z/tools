@@ -1,8 +1,12 @@
 package Service;
 
+import Service.bo.BO;
+import Web.vo.VO;
+import base.api.CommonBuildMethods;
 import base.entity.Directory;
 import base.entity.Module;
 import base.entity.ObjFile;
+import main.Project;
 
 public class Service extends Module {
     public Service(String moduleName) {
@@ -15,9 +19,15 @@ public class Service extends Module {
         this.createFunctionDirectory();
         // step2: bo
         this.getDirectory().appendSubDirectory(new Directory("bo"))
-                .addSavedFile(new ObjFile("BO","java"));
+                .addSavedFile(new ObjFile("BO","java",this.createServiceBO()));
         // step3: interface
         this.getDirectory().addSavedFile(new ObjFile("Service","java"));
+    }
+
+    private String createServiceBO() {
+        Project project = Project.getInstance();
+        CommonBuildMethods bo = new BO(project.parseSqlEntity());
+        return bo.createStoredString();
     }
 
 }

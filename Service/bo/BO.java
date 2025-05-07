@@ -1,12 +1,12 @@
 package Service.bo;
 
+import Utils.SQL.entity.entity.EntityClass;
 import base.api.CommonBuildMethods;
-import Utils.SQL.entity.entity.Entity;
 
-public class BO extends Entity implements CommonBuildMethods {
+public class BO extends EntityClass implements CommonBuildMethods {
 
-    public BO(Entity entity) {
-        super(entity.getName()+"BO", entity.getPropertyList());
+    public BO(EntityClass entityClass) {
+        super(entityClass.getName()+"BO", entityClass.getPropertyList());
     }
 
     @Override

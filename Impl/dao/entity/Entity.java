@@ -1,10 +1,11 @@
 package Impl.dao.entity;
 
 import base.api.CommonBuildMethods;
+import Utils.SQL.entity.entity.EntityClass;
 
-public class Entity extends Utils.SQL.entity.entity.Entity implements CommonBuildMethods {
+public class Entity extends EntityClass implements CommonBuildMethods {
 
-    public Entity(Utils.SQL.entity.entity.Entity entity) {
+    public Entity(EntityClass entity) {
         super(entity.getName(), entity.getPropertyList());
     }
 
