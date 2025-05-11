@@ -7,13 +7,13 @@ import Utils.StringUtil;
  */
 public class Column {
     // 是否主键
-    private Boolean isKey;
+    private final Boolean isKey;
     // 字段类型 (int, varchar, decimal...)
-    private String type;
+    private final String type;
     // 字段名称 (_带下划线)
-    private String name;
+    private final String name;
     // 字段注释 (// )
-    private String comment;
+    private final String comment;
 
     public Column(Boolean isKey, String type, String name, String comment) {
         this.isKey = isKey;

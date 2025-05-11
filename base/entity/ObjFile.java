@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 
 public class ObjFile implements StructureMethod {
     // 文件名称
-    private String fileName;
+    private final String fileName;
     // 文件类型（后缀）
-    private String fileType;
+    private final String fileType;
     // 文件内容
     private String content;
     // 所属文件夹

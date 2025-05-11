@@ -32,7 +32,7 @@ public class parseSqlUtil {
         this.setTableName();
     }
 
-    private static Map<String,String> typeMapping = new HashMap<String,String>();
+    private static final Map<String,String> typeMapping = new HashMap<String,String>();
 
     static {
         typeMapping.put("int","Integer");
@@ -45,7 +45,6 @@ public class parseSqlUtil {
     /**
      * 解析建表语句 生成
      * create table xxx {  };
-     * @param createSql
      */
     private void parseCreateTable(String createSql) {
         try {
@@ -61,16 +60,14 @@ public class parseSqlUtil {
                 // 提取 SQL 字段
                 List<Column> columnList = new ArrayList<>();
                 String[] columns = matcher.group(2).split("',");
-                if(columns != null && columns.length > 0) {
-                    for(String column : columns) {
-                        // 正则表达式匹配取值
-                        regex = "\\s*(\\w+)\\s+(\\w+)\\(.*comment\\s+'([^']+)";
-                        pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-                        matcher = pattern.matcher(column);
-                        if(matcher.find()) {
-                            Column obj = new Column(matcher.group(2), matcher.group(1), matcher.group(3));
-                            columnList.add(obj);
-                        }
+                for (String column : columns) {
+                    // 正则表达式匹配取值
+                    regex = "\\s*(\\w+)\\s+(\\w+)\\(.*comment\\s+'([^']+)";
+                    pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                    matcher = pattern.matcher(column);
+                    if (matcher.find()) {
+                        Column obj = new Column(matcher.group(2), matcher.group(1), matcher.group(3));
+                        columnList.add(obj);
                     }
                 }
                 this.table.setColumnList(columnList);
@@ -96,7 +93,7 @@ public class parseSqlUtil {
     }
 
     private void setTableName() {
-        if(this.commonName == null || "".equals(this.commonName)) {
+        if(this.commonName == null || this.commonName.isEmpty()) {
             this.commonName = this.entityClass.getName();
         }
     }

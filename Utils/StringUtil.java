@@ -3,7 +3,7 @@ package Utils;
 public class StringUtil {
 
     public static Boolean isNotBlank(String str) {
-        return !(str == null || "".equals(str) || str.trim().length() == 0);
+        return !(str == null || str.isEmpty() || str.trim().isEmpty());
     }
 
     /**
@@ -25,7 +25,7 @@ public class StringUtil {
         StringBuilder result = new StringBuilder();
         String[] parts = column.split("_");
         for(String part : parts) {
-            if(result.length() == 0) {
+            if(result.isEmpty()) {
                 result.append(part.toLowerCase());
             } else {
                 result.append(FirstUpperLeftLower(part));

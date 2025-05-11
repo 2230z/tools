@@ -17,7 +17,7 @@ public class IoUtils {
             if (StringUtil.isNotBlank(path)) {
                 StringBuilder sqlStatements = new StringBuilder();
                 Stream<String> lines = Files.lines(Paths.get(path));
-                lines.forEach(line -> { sqlStatements.append(line); });
+                lines.forEach(sqlStatements::append);
                 content = sqlStatements.toString();
             }
         } catch (Exception e) {

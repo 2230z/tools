@@ -31,7 +31,7 @@ public class Project {
     private String prefix;
     // SQL 脚本路径
     // todo sql脚本应该从项目中遍历搜索，自动判断是否需要生成文件
-    private static String sqlScript;
+    private static final String sqlScript;
     // 模块列表
     private List<Module> moduleList;
     // sql 解析对象
@@ -44,7 +44,7 @@ public class Project {
     public String getCommonName() { return this.parsedSql.getCommonName(); }
 
     // 单例模式对象
-    private static Project project;
+    private static final Project project;
 
     static {
         projectPath = "E:/isoftstone/projects/ZiJinXinTuo/trust/java/cms.trust";
@@ -71,15 +71,15 @@ public class Project {
      * 解析项目名称
      */
     private void parseProjectName() {
-        if(StringUtil.isNotBlank(this.projectPath)) {
-            this.projectPath = this.projectPath.contains("\\") ?
-                    this.projectPath.replaceAll("\\\\", "/") :
-                    this.projectPath;
+        if(StringUtil.isNotBlank(projectPath)) {
+            projectPath = projectPath.contains("\\") ?
+                    projectPath.replaceAll("\\\\", "/") :
+                    projectPath;
             // 判断文件路径真实有效
-            File file = new File(this.projectPath);
+            File file = new File(projectPath);
             if(file.exists() && file.isDirectory()) {
                 // 截取模块名称
-                String[] parts = this.projectPath.split("/");
+                String[] parts = projectPath.split("/");
                 if (parts.length > 1) {
                     projectName = parts[parts.length - 1];
                 }
@@ -107,11 +107,11 @@ public class Project {
         classForNameMapping.put("war","War.War");
 
         this.getFixedProjectPrefix();
-        if (StringUtil.isNotBlank(this.projectPath)) {
+        if (StringUtil.isNotBlank(projectPath)) {
             String regex = this.projectName + ".(\\w+)";
             Pattern pattern = Pattern.compile(regex);
             File file = new File(projectPath);
-            this.moduleList = Arrays.stream(file.listFiles())
+            this.moduleList = Arrays.stream(Objects.requireNonNull(file.listFiles()))
                     .filter(f -> pattern.matcher(f.getName()).find())
                     .map(e -> {
                         Matcher matcher = pattern.matcher(e.getName());
@@ -120,8 +120,7 @@ public class Project {
                             try {
                                 Class<?> moduleClass = Class.forName(classForNameMapping.get(name));
                                 Constructor<?> constructor = moduleClass.getConstructor(String.class);
-                                Module obj = (Module) constructor.newInstance(e.getName());
-                                return obj;
+                                return (Module) constructor.newInstance(e.getName());
                             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -136,8 +135,8 @@ public class Project {
         this.prefix = "";
         final String startApplication = "startApplication.java";
         // 构建war包路径
-        String[] parts = this.projectPath.split("/");
-        String path = new StringBuilder(projectPath).append("/").append(parts[parts.length - 1]).append(".war/src/main/java").toString();
+        String[] parts = projectPath.split("/");
+        String path = projectPath + "/" + parts[parts.length - 1] + ".war/src/main/java";
         if(!Files.exists(Paths.get(path))) {
             System.out.println("项目路径无效");
         }
@@ -145,10 +144,10 @@ public class Project {
             File file = new File(path);
             if(file.isDirectory()) {
                 File[] files = file.listFiles();
-                if(files.length == 1 && files[0].isDirectory()) {
+                if (files != null && files.length == 1 && files[0].isDirectory()) {
                     path += "/" + files[0].getName();
                     this.prefix += "/" + files[0].getName();
-                } else break;
+                }
             } else if(file.isFile() && file.getName().equals(startApplication)) break;
         }
     }

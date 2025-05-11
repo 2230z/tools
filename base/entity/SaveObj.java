@@ -11,13 +11,13 @@ import java.nio.file.Paths;
 
 public class SaveObj {
     // 保存路径
-    private String savePath;
+    private final String savePath;
     // 文件名称
-    private String fileName;
+    private final String fileName;
     // 文件类型（后缀）
-    private String fileType;
+    private final String fileType;
     // 文件内容
-    private String content;
+    private final String content;
 
     public SaveObj(String savePath, String fileName, String fileType, String content) {
         this.savePath = savePath.contains("\\") ? savePath.replaceAll("\\\\", "/") : savePath;
