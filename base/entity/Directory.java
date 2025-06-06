@@ -2,12 +2,13 @@ package base.entity;
 
 import Utils.IoUtils;
 import base.api.StructureMethod;
-
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 文件夹类
+ */
 public class Directory implements StructureMethod {
     // 文件夹名称
     private final String name;
@@ -17,7 +18,7 @@ public class Directory implements StructureMethod {
     private Directory parentDirectory;
     // 子文件夹
     private List<Directory> directoryList;
-    // 问价
+    // 文件
     private List<ObjFile> fileList;
 
     public Directory(String name) { this.name = name; }
@@ -54,29 +55,27 @@ public class Directory implements StructureMethod {
     @Override
     public String getAbsolutePath() {
         String absolutePath = "/" + this.name;
-        // 出口
-        if(this.module != null) {
-            absolutePath = this.module.getAbsolutePath() + absolutePath;
-        } else if(this.parentDirectory != null) {
-            absolutePath = this.parentDirectory.getAbsolutePath() + absolutePath;
-        }
-        return absolutePath;
+        return Optional.ofNullable(this.module)
+                .map(Module::getAbsolutePath)
+                .flatMap(modulePath -> Optional.of(modulePath + absolutePath))
+                .orElseGet(() -> Optional.ofNullable(this.parentDirectory)
+                        .map(Directory::getAbsolutePath)
+                        .flatMap(parentPath -> Optional.of(parentPath + absolutePath))
+                        .orElse(absolutePath));
     }
 
     // 保存文件
     public void iteratorSave() {
-
         // step1: 创建子文件夹
         if(this.directoryList != null && !this.directoryList.isEmpty()) {
-            this.directoryList.forEach(e -> IoUtils.mkdir(e.getAbsolutePath()));
+            this.directoryList.forEach(e -> {
+                IoUtils.mkdir(e.getAbsolutePath());
+                e.iteratorSave();
+            });
         }
         // step2: 保存当前文件夹内容
         if(this.fileList != null && !this.fileList.isEmpty()) {
             this.fileList.forEach(ObjFile::save);
-        }
-        // 子文件夹递归
-        if(this.directoryList != null && !this.directoryList.isEmpty()) {
-            this.directoryList.forEach(Directory::iteratorSave);
         }
     }
 }

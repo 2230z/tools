@@ -1,0 +1,66 @@
+package target.Impl;
+
+import SQL.entity.table.Table;
+import target.Impl.dao.entity.Entity;
+import base.api.CommonBuildMethods;
+import base.entity.Directory;
+import base.entity.Module;
+import base.entity.ObjFile;
+import base.entity.Project;
+
+public class Impl extends Module {
+
+    public Impl(String moduleName) { super(moduleName); }
+
+    @Override
+    public void buildDirectories() {
+        // step1: 生成开发的一级文件夹
+        this.createFunctionDirectory();
+        // step2: Dao
+        Directory dao = this.getDirectory().appendSubDirectory(new Directory("dao"));
+        dao.appendSubDirectory(new Directory("entity"))
+                .addSavedFile(new ObjFile("java", this.createDaoEntity()));
+        dao.appendSubDirectory(new Directory("impl"))
+                .addSavedFile(new ObjFile("DaoImpl","java", this.createDaoInterfaceImpl()));
+        dao.appendSubDirectory(new Directory("mapper"))
+                .addSavedFile(new ObjFile("Mapper","xml", this.createMybatisXML()));
+        dao.addSavedFile(new ObjFile( "Dao","java", this.createDaoInterface()));
+        // step3: Service.impl
+        this.getDirectory().appendSubDirectory(new Directory("service"))
+                .appendSubDirectory(new Directory("impl"))
+                .addSavedFile(new ObjFile("ServiceImpl","java", this.createServiceInterfaceImpl()));
+    }
+
+
+    // 实体类
+    private String createDaoEntity() {
+        Project project = Project.getInstance();
+        CommonBuildMethods entity = new Entity(project.parseSqlEntity());
+        return entity.createStoredString();
+    }
+
+    // Dao接口
+    private String createDaoInterface() {
+        return "";
+    }
+
+    // Dao接口实现类
+    private String createDaoInterfaceImpl() {
+        return "";
+    }
+
+    // Mybatis XML文件
+    private String createMybatisXML() {
+        Project project = Project.getInstance();
+        Table table = project.parseSqlTable();
+        String DaoPath = getAbsolutePath() + "/dao/mapper/" + project.getCommonName() + "Mapper.xml";
+        String entityPath = getAbsolutePath() + "/dao/entity/" + project.getCommonName() + ".java";
+        return table.createMybatisXML(DaoPath, entityPath);
+    }
+
+    // Service接口实现类
+    private String createServiceInterfaceImpl() {
+        return "";
+    }
+
+}

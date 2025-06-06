@@ -16,6 +16,13 @@ public class StringUtil {
     }
 
     /**
+     * 仅小写首字母，其余不变
+     */
+    public static String onlyFirstLower(String str) {
+        return str.substring(0,1).toLowerCase() + str.substring(1);
+    }
+
+    /**
      * 将下划线命名转为驼峰命名
      * business_no --> businessNo
      * @param column 数据库列名
@@ -25,7 +32,7 @@ public class StringUtil {
         StringBuilder result = new StringBuilder();
         String[] parts = column.split("_");
         for(String part : parts) {
-            if(result.isEmpty()) {
+            if(result.length() == 0) {
                 result.append(part.toLowerCase());
             } else {
                 result.append(FirstUpperLeftLower(part));

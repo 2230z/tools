@@ -2,12 +2,14 @@ package base.entity;
 
 import Utils.IoUtils;
 import base.api.StructureMethod;
-import main.Project;
+
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 抽象模块类
+ */
 public abstract class Module implements StructureMethod {
     // 公共子路径
     private static final String fixedSubPath = "/src/main/java";
@@ -56,22 +58,19 @@ public abstract class Module implements StructureMethod {
     }
 
     /**
-     * 两个抽象方法：1.创建文件夹
+     * 两个抽象方法：1.创建文件夹和文件  2. 持久化
      * @return
      */
     // 构建文件夹结构
     abstract public void buildDirectories();
 
-    // 外部调用的公共入口
-    public void run() {
-        // step1: 构建文件夹结构
-        this.buildDirectories();
-        // step2: 生成内容持久化
+    // 生成的文件持久化 (包括文件夹)
+    public void buildFiles() {
         this.directory.iteratorSave();
     }
 
     @Override
     public String getAbsolutePath() {
-        return Project.getModulePath() + this.modulePath;
+        return Project.getProjectPath() + this.modulePath;
     }
 }
