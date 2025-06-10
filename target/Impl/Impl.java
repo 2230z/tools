@@ -8,11 +8,21 @@ import base.entity.Directory;
 import base.entity.Module;
 import base.entity.ObjFile;
 import base.entity.Project;
+import target.Impl.dao.impl.DaoImpl;
 import target.Impl.dao.mapper.Mapper;
+import target.Impl.service.impl.ServiceImpl;
 
 public class Impl extends Module {
 
-    public Impl(String moduleName) { super(moduleName); }
+    private String nameSpace;
+    private String entityPath;
+
+    public Impl(String moduleName) {
+        super(moduleName);
+        Project project = Project.getInstance();
+        nameSpace = getAbsolutePath() + "/dao/" + project.getCommonName() + "Dao.java";
+        entityPath = getAbsolutePath() + "/dao/entity/" + project.getCommonName() + ".java";
+    }
 
     @Override
     public void buildDirectories() {
@@ -49,21 +59,20 @@ public class Impl extends Module {
 
     // Dao接口实现类
     private String createDaoInterfaceImpl() {
-        return "";
+        CommonBuildMethods dao = new DaoImpl(nameSpace);
+        return dao.createStoredString();
     }
 
     // Mybatis XML文件
     private String createMybatisXML() {
-        Project project = Project.getInstance();
-        String DaoPath = getAbsolutePath() + "/dao/mapper/" + project.getCommonName() + "Mapper.xml";
-        String entityPath = getAbsolutePath() + "/dao/entity/" + project.getCommonName() + ".java";
-        Mapper mapper = new Mapper(DaoPath, entityPath);
+        Mapper mapper = new Mapper(nameSpace, entityPath);
         return mapper.createMybatisXML();
     }
 
     // Service接口实现类
     private String createServiceInterfaceImpl() {
-        return "";
+        CommonBuildMethods service = new ServiceImpl();
+        return service.createStoredString();
     }
 
 }

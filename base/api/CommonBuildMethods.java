@@ -8,7 +8,7 @@ public interface CommonBuildMethods {
     // 依赖
     public abstract String buildImportStatement();
 
-    // 内容
+    // 主体内容
     public abstract String buildEntityStatement();
 
     default String createStoredString() {
