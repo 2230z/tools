@@ -8,6 +8,7 @@ import base.entity.Directory;
 import base.entity.Module;
 import base.entity.ObjFile;
 import base.entity.Project;
+import target.Impl.dao.mapper.Mapper;
 
 public class Impl extends Module {
 
@@ -54,10 +55,10 @@ public class Impl extends Module {
     // Mybatis XML文件
     private String createMybatisXML() {
         Project project = Project.getInstance();
-        Table table = project.parseSqlTable();
         String DaoPath = getAbsolutePath() + "/dao/mapper/" + project.getCommonName() + "Mapper.xml";
         String entityPath = getAbsolutePath() + "/dao/entity/" + project.getCommonName() + ".java";
-        return table.createMybatisXML(DaoPath, entityPath);
+        Mapper mapper = new Mapper(DaoPath, entityPath);
+        return mapper.createMybatisXML();
     }
 
     // Service接口实现类
