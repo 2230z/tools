@@ -21,14 +21,17 @@ public class Service extends Module {
         this.getDirectory().addSavedFile(new ObjFile("Service","java", this.createServiceInterface()));
     }
 
+    // BO
     private String createServiceBO() {
         Project project = Project.getInstance();
         CommonBuildMethods bo = new BO(project.parseSqlEntity());
         return bo.createStoredString();
     }
 
+    // Service 接口
     private String createServiceInterface() {
-        return "";
+        CommonBuildMethods serviceInterface = new ServiceInterface();
+        return serviceInterface.createStoredString();
     }
 
 }

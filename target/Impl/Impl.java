@@ -1,6 +1,7 @@
 package target.Impl;
 
 import SQL.entity.table.Table;
+import target.Impl.dao.Dao;
 import target.Impl.dao.entity.Entity;
 import base.api.CommonBuildMethods;
 import base.entity.Directory;
@@ -41,7 +42,8 @@ public class Impl extends Module {
 
     // Dao接口
     private String createDaoInterface() {
-        return "";
+        CommonBuildMethods daoInterface = new Dao();
+        return daoInterface.createStoredString();
     }
 
     // Dao接口实现类
