@@ -1,5 +1,6 @@
 package target.Web;
 
+import target.Web.controller.Controller;
 import target.Web.vo.VO;
 import base.api.CommonBuildMethods;
 import base.entity.Directory;
@@ -18,7 +19,7 @@ public class Web extends Module {
         this.createFunctionDirectory();
         // step2: controller
         this.getDirectory().appendSubDirectory(new Directory("controller"))
-                .addSavedFile(new ObjFile("Controller","java"));
+                .addSavedFile(new ObjFile("Controller","java", this.createController()));
         // step3: vo
         this.getDirectory().appendSubDirectory(new Directory("vo"))
                 .addSavedFile(new ObjFile("VO","java", this.createWebVO()));
@@ -33,7 +34,8 @@ public class Web extends Module {
 
     // Controller类
     private String createController() {
-        return "";
+        CommonBuildMethods controller = new Controller();
+        return controller.createStoredString();
     }
 
 }

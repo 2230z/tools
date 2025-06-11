@@ -79,7 +79,7 @@ public class ServiceInterface implements CommonBuildMethods {
     private Function createInsert() {
         return new Function(
                 "int",
-                String.format("insert%s", boType),
+                String.format("save%s", boType),
                 new ArrayList<>(Arrays.asList(
                         new Param(boType, boName)
                 ))

@@ -21,8 +21,10 @@ import java.util.stream.Collectors;
  * @date 2025/4/28
  */
 public class Project {
-    // 项目名称
+    // 项目名称 e.g. cms.abc
     private String projectName;
+    // 项目模块名称  e.g. abc
+    private String projectModuleName;
     // 项目路径  e.g. E:/xxx
     private static String projectPath;
     // 项目名称公共前缀 e.g. src/main/java/(com/iss/cms)/trust/xxx
@@ -35,15 +37,23 @@ public class Project {
     // sql 解析对象
     private parseSql parsedSql;
 
+    // 获取项目路径
     public static String getProjectPath() { return projectPath; }
 
+    // 获取公共前缀 cms.xxx.xxx
     public String getPrefix() { return this.prefix; }
 
+    // 每个单词首字母大写
     public String getCommonName() { return this.parsedSql.getCommonName(); }
 
+    // 获取解析 SQL 后的表对象，供生成 MyBatis 文件使用
     public Table parseSqlTable() { return this.parsedSql.getTable(); }
 
+    // 获取解析 SQL 后的实体对象，供生成 Entity，BO，VO 文件使用
     public EntityClass parseSqlEntity() { return this.parsedSql.getEntityClass(); }
+
+    // 获取项目模块名称
+    public String getProjectModuleName() { return this.projectModuleName; }
 
     /**
      * 单例模式
@@ -81,9 +91,13 @@ public class Project {
             File file = new File(projectPath);
             if(file.exists() && file.isDirectory()) {
                 // 截取模块名称
-                String[] parts = projectPath.split("/");
-                if (parts.length > 1) {
-                    projectName = parts[parts.length - 1];
+                int lastIndex = projectPath.lastIndexOf('/');
+                projectName = (lastIndex != -1) ? projectPath.substring(lastIndex + 1) : projectPath;
+                if(StringUtil.isNotBlank(projectName)) {
+                    int lastDotIndex = projectName.lastIndexOf('.');
+                    if(lastDotIndex != -1) {
+                        projectModuleName = projectName.substring(lastDotIndex+1);
+                    }
                 }
             }
         }
@@ -92,9 +106,7 @@ public class Project {
     /**
      * 解析 SQL 脚本文件
      */
-    private void parseSqlScripts() {
-        this.parsedSql = new parseSql(sqlScript);
-    }
+    private void parseSqlScripts() { this.parsedSql = new parseSql(sqlScript); }
 
     /**
      * 构建模块列表

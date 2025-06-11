@@ -11,6 +11,8 @@ public class DaoImpl implements CommonBuildMethods {
     private String entityType;
     // Entity实例
     private String entityName;
+    // 项目模块名称
+    private String projectModuleName;
 
     public DaoImpl(String nameSpace) {
         this.nameSpace = nameSpace;
@@ -18,6 +20,7 @@ public class DaoImpl implements CommonBuildMethods {
         Project project = Project.getInstance();
         entityType = project.getCommonName();
         entityName = StringUtil.onlyFirstLower(entityType);
+        projectModuleName = project.getProjectModuleName();
     }
 
     @Override
@@ -32,13 +35,14 @@ public class DaoImpl implements CommonBuildMethods {
 
     @Override
     public String buildEntityStatement() {
-        return String.format("@Repository(\"%1$sDaoImpl\")\n" +
-                            "public class %1$sDaoImpl implements %1$sDao { \n" +
-                                "private static final String NAMESPACE = \"%2$s.\";" +
+        return String.format("@Repository(\"%1$s-%2$sDaoImpl\")\n" +
+                            "public class %2$sDaoImpl implements %2$sDao { \n" +
+                                "private static final String NAMESPACE = \"%3$s.\";" +
                                 "@Autowired \n" +
                                 "private SqlSessionTemplate sqlSessionTemplate; \n" +
-                                "%3$s \n" +
+                                "%4$s \n" +
                             "}",
+                                 projectModuleName,
                                  entityType,
                                  nameSpace,
                                  this.createAllFunctions());
@@ -87,15 +91,8 @@ public class DaoImpl implements CommonBuildMethods {
     }
 
     private String createAllFunctions() {
-        return String.format("%s \n" +
-                             "%s \n" +
-                             "%s \n" +
-                             "%s \n" +
-                             "%s \n", this.createQueryByPage(),
-                                      this.createQueryById(),
-                                      this.createInsert(),
-                                      this.createDelete(),
-                                      this.createUpdate());
+        return String.format("%s \n %s \n %s \n %s \n %s \n",
+                this.createQueryByPage(), this.createQueryById(), this.createInsert(), this.createDelete(), this.createUpdate());
     }
 
 }
